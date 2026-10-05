@@ -567,3 +567,21 @@ p { margin: 0 0 1rem; }
 .site-header ul { order: 1; }
 .theme-toggle { order: 2; }
 .menu-toggle { order: 3; }
+
+.entry .scope { margin: 0.35rem 0 0; font-size: 0.925rem; font-style: italic; color: var(--muted); }
+
+.quote {
+  margin: 0 0 1.25rem;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--accent);
+}
+
+.quote p { margin: 0; font-size: 1.1rem; font-style: italic; }
+
+.quote cite {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  font-style: normal;
+  color: var(--muted);
+}

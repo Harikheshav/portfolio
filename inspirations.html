@@ -275,11 +275,16 @@
     // Theme toggle: flip between light and dark and remember the choice
     const root = document.documentElement;
     const dark = window.matchMedia('(prefers-color-scheme: dark)');
-    document.querySelector('.theme-toggle').addEventListener('click', () => {
-      const current = root.dataset.theme || (dark.matches ? 'dark' : 'light');
-      const next = current === 'dark' ? 'light' : 'dark';
+    const themeBtn = document.querySelector('.theme-toggle');
+    const effective = () => root.dataset.theme || (dark.matches ? 'dark' : 'light');
+    const syncPressed = () => themeBtn.setAttribute('aria-pressed', effective() === 'dark');
+    syncPressed();
+    dark.addEventListener('change', syncPressed);
+    themeBtn.addEventListener('click', () => {
+      const next = effective() === 'dark' ? 'light' : 'dark';
       root.dataset.theme = next;
       try { localStorage.setItem('theme', next); } catch (e) {}
+      syncPressed();
     });
 
     // Mobile menu: toggle, and close after choosing a section or pressing Escape

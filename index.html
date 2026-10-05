@@ -99,8 +99,8 @@
           <article class="card featured">
             <p class="meta">2023 – present · Open source</p>
             <h3>Shakti RISC-V Processor — Core, Peripherals &amp; Fabrics</h3>
-            <p>Contributions to IIT Madras's open-source Shakti processor: parameterised AXI4 interfaces across peripherals and crypto accelerators, a new APB bus for the SoC fabric, and smaller fixes in the core.</p>
-            <ul class="tags"><li>Bluespec</li><li>RISC-V</li><li>AXI4</li><li>APB</li><li>SoC peripherals</li></ul>
+            <p>Contributions to IIT Madras's open-source Shakti processor: parameterised AXI4 interfaces across peripherals and crypto accelerators, a new APB bus for the SoC fabric, 16550-style hardware flow control for the UART, DMA bug fixes, and smaller fixes in the core.</p>
+            <ul class="tags"><li>Bluespec</li><li>RISC-V</li><li>AXI4</li><li>APB</li><li>UART</li><li>DMA</li></ul>
             <p class="links"><a href="https://gitlab.com/shaktiproject" target="_blank" rel="noopener">Shakti on GitLab →</a></p>
           </article>
 
@@ -152,10 +152,14 @@
             <div>
               <h3>Project Research Associate — Shakti Processor</h3>
               <p class="org">RISE Lab, Indian Institute of Technology Madras · Chennai</p>
+              <p class="scope">Core, fabric and peripheral work across the Shakti SoC ecosystem.</p>
               <ul>
-                <li>Parameterised AXI4 ID widths across SoC peripherals (UART, GPIO, DMA, QSPI, CLINT, PLIC) and the AES, RSA and SHA crypto blocks.</li>
-                <li>Adding an APB bus to the Shakti fabrics, with an APB error slave and SoC-level compatibility tests.</li>
+                <li>Adding an APB bus to the SoC fabrics, with an APB error slave and SoC-level compatibility tests.</li>
+                <li>Parameterised AXI4 ID widths across SoC peripherals (UART, GPIO, DMA, QSPI, CLINT, PLIC) and the AES, RSA and SHA crypto blocks, in Bluespec SystemVerilog.</li>
                 <li>Contributed to the C-Class core's instruction-trace logic and configuration, along with trace scripts for verification.</li>
+                <li>Worked on custom peripherals for a private SoC.</li>
+                <li>Fixed a few small bugs in the DMA controller.</li>
+                <li>Added 16550-style hardware flow control to the UART.</li>
                 <li>Test the designs and develop their driver code in C.</li>
               </ul>
             </div>
@@ -245,27 +249,35 @@
         <h2><span class="bin" aria-hidden="true">0110</span>Honors</h2>
         <ul class="compact">
           <li>
+            <span class="what">Judge, Makeathon 2025</span>
+            <span class="detail">Sri Venkateswara College of Engineering · 2025</span>
+          </li>
+          <li>
             <span class="what">Winner, Idea Jam 2.0</span>
-            <span class="detail">Dept. of CSE, Sri Venkateswara College of Engineering</span>
+            <span class="detail">Dept. of CSE, Sri Venkateswara College of Engineering · 2020</span>
+          </li>
+          <li>
+            <span class="what">Swadeshi Microprocessor Challenge</span>
+            <span class="detail">Cleared the first three levels · 2020</span>
           </li>
           <li>
             <span class="what">2nd place, Digital Simulation (D-SIM)</span>
             <span class="detail">Invente 4.0, SSN College of Engineering · 2019</span>
           </li>
-          <li>
-            <span class="what">Swadeshi Microprocessor Challenge</span>
-            <span class="detail">Cleared the first three levels</span>
-          </li>
         </ul>
       </div>
     </section>
 
-    <section id="beyond">
+    <section id="giants">
       <div class="container">
-        <h2><span class="bin" aria-hidden="true">0111</span>Beyond work</h2>
+        <h2><span class="bin" aria-hidden="true">0111</span>On the shoulders of giants</h2>
         <div class="prose">
-          <p>I play the keyboard and enjoy music theory even more than performing. I also keep a wall of the scientists and engineers who drew me into this field.</p>
-          <p><a href="inspirations.html">See who inspires me →</a></p>
+          <blockquote class="quote">
+            <p>"If I have seen further, it is by standing on the shoulders of giants."</p>
+            <cite>— Isaac Newton, in a letter to Robert Hooke, 1675</cite>
+          </blockquote>
+          <p>I keep a wall of the scientists, mathematicians and engineers who drew me into this field — from Aryabhata and Ramanujan to Turing and Ada Lovelace.</p>
+          <p><a href="inspirations.html">Meet the giants →</a></p>
         </div>
       </div>
     </section>
@@ -289,11 +301,16 @@
     // Theme toggle: flip between light and dark and remember the choice
     const root = document.documentElement;
     const dark = window.matchMedia('(prefers-color-scheme: dark)');
-    document.querySelector('.theme-toggle').addEventListener('click', () => {
-      const current = root.dataset.theme || (dark.matches ? 'dark' : 'light');
-      const next = current === 'dark' ? 'light' : 'dark';
+    const themeBtn = document.querySelector('.theme-toggle');
+    const effective = () => root.dataset.theme || (dark.matches ? 'dark' : 'light');
+    const syncPressed = () => themeBtn.setAttribute('aria-pressed', effective() === 'dark');
+    syncPressed();
+    dark.addEventListener('change', syncPressed);
+    themeBtn.addEventListener('click', () => {
+      const next = effective() === 'dark' ? 'light' : 'dark';
       root.dataset.theme = next;
       try { localStorage.setItem('theme', next); } catch (e) {}
+      syncPressed();
     });
 
     // Mobile menu: toggle, and close after choosing a section or pressing Escape
